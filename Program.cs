@@ -55,18 +55,41 @@ public static class Program
                 synonyms.Add(synonym);
         }
 
+        int resultNum = 0;
+        string[] results = null;
         for (; ; )
         {
-            Console.Write("Enter title (empty to quit): ");
+            if (results != null && resultNum < results.Length)
+                Console.WriteLine("Enter title (\"quit\" to quit, or press enter to show more results)");
+            else
+                Console.WriteLine("Enter title (\"quit\" to quit)");
+
+            Console.Write("> ");
+
             var title = Console.ReadLine();
             if (string.IsNullOrEmpty(title))
+            {
+                if (results == null || resultNum >= results.Length)
+                    continue;
+            }
+            else if (string.Equals("quit", title, StringComparison.InvariantCultureIgnoreCase))
+            {
                 break;
+            }
+            else
+            {
+                Console.WriteLine();
+                results = GetResults(title, dict);
+                Shuffle(results);
+                resultNum = 0;
+            }
 
-            Console.WriteLine();
-            var results = GetResults(title, dict);
-            Shuffle(results);
-            for (int i = 0; i < MaxResults && i < results.Length; i++)
-                Console.WriteLine(results[i]);
+            int startNum = resultNum;
+            for (; resultNum < startNum + MaxResults && resultNum < results.Length; resultNum++)
+                Console.WriteLine(results[resultNum]);
+
+            if (resultNum < results.Length)
+                Console.WriteLine($"Shown {resultNum} of {results.Length}");
 
             Console.WriteLine();
         }
