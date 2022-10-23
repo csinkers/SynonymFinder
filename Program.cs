@@ -7,13 +7,13 @@ namespace SynonymFinder;
 
 class Entry
 {
-    [JsonPropertyName("word")] public string Word { get; set; }
     [JsonPropertyName("key")] public string Key { get; set; }
     [JsonPropertyName("pos")] public string Pos { get; set; }
+    [JsonPropertyName("word")] public string Word { get; set; }
     [JsonPropertyName("synonyms")] public List<string> Synonyms { get; set; }
 }
 
-public class Program
+public static class Program
 {
     const string ThesaurusFilename = "en_thesaurus.jsonl";
     const int MaxResults = 50;
@@ -51,11 +51,11 @@ public class Program
                 dict[lower] = synonyms;
             }
 
-            foreach(var synonym in entry.Synonyms)
+            foreach (var synonym in entry.Synonyms)
                 synonyms.Add(synonym);
         }
 
-        for (;;)
+        for (; ; )
         {
             Console.Write("Enter title (empty to quit): ");
             var title = Console.ReadLine();
@@ -67,6 +67,8 @@ public class Program
             Shuffle(results);
             for (int i = 0; i < MaxResults && i < results.Length; i++)
                 Console.WriteLine(results[i]);
+
+            Console.WriteLine();
         }
     }
 
