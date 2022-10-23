@@ -16,6 +16,7 @@ class Entry
 public class Program
 {
     const string ThesaurusFilename = "en_thesaurus.jsonl";
+    const int MaxResults = 50;
 
     public static void Main()
     {
@@ -30,8 +31,10 @@ public class Program
             return;
         }
 
-        var json = File.ReadAllText(ThesaurusFilename);
-        var jsonEntries = JsonSerializer.Deserialize<List<Entry>>(json);
+        List<Entry> jsonEntries;
+        using (var file = File.OpenRead(Path.Combine(curDir, ThesaurusFilename)))
+            jsonEntries = JsonSerializer.Deserialize<List<Entry>>(file);
+
         if (jsonEntries == null)
         {
             Console.WriteLine($"Could not deserialise thesaurus file {ThesaurusFilename}");
@@ -62,7 +65,7 @@ public class Program
             Console.WriteLine();
             var results = GetResults(title, dict);
             Shuffle(results);
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < MaxResults && i < results.Length; i++)
                 Console.WriteLine(results[i]);
         }
     }
