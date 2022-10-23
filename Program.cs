@@ -41,18 +41,18 @@ public static class Program
             return;
         }
 
-        var dict = new Dictionary<string, List<string>>();
+        var dict = new Dictionary<string, HashSet<string>>();
         foreach (var entry in jsonEntries)
         {
             var lower = entry.Word.ToLowerInvariant();
             if (!dict.TryGetValue(lower, out var synonyms))
             {
-                synonyms = new List<string> { entry.Word };
+                synonyms = new HashSet<string> { entry.Word.ToLowerInvariant() };
                 dict[lower] = synonyms;
             }
 
             foreach (var synonym in entry.Synonyms)
-                synonyms.Add(synonym);
+                synonyms.Add(synonym.ToLowerInvariant());
         }
 
         int resultNum = 0;
@@ -95,7 +95,7 @@ public static class Program
         }
     }
 
-    static string[] GetResults(string title, Dictionary<string, List<string>> synonymDictionary)
+    static string[] GetResults(string title, Dictionary<string, HashSet<string>> synonymDictionary)
     {
         var parts = title.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         var partSynonyms = new List<string>[parts.Length];
