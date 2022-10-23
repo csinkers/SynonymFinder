@@ -1,5 +1,4 @@
-This utility uses the database from `https://github.com/zaibacu/thesaurus`.
-
+This utility uses the database from `https://github.com/zaibacu/thesaurus` with the below license.
 The C# code for this project is licensed under MIT.
 
 # License for WordNet
